@@ -5,6 +5,7 @@ interface IInputField {
   title: string;
   helperText?: string;
   type: "password" | "email" | "text";
+  name: string;
   value: string;
   placeholder?: string;
   fieldIcon?: any;
@@ -18,6 +19,7 @@ export default function InputField({
   title,
   helperText,
   type,
+  name,
   value,
   placeholder = "",
   fieldIcon,
@@ -36,8 +38,9 @@ export default function InputField({
 
       <div className="h-25 flex flex-row items-center relative">
         <input
-          className="w-full bg-input-primary placeholder-input-third px-2.5 py-5 my-2 rounded border border-input-border sm:h-10 md:h-12 lg:h-14"
+          className="w-full text-textPrimary bg-input-primary placeholder-input-third px-2.5 py-5 my-2 rounded border border-input-border sm:h-10 md:h-12 lg:h-14"
           value={value}
+          name={name}
           type={type === "password" && showPassword ? "text" : type}
           placeholder={placeholder}
           onChange={handleChangeText}

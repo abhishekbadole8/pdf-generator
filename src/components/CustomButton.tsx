@@ -1,6 +1,6 @@
 interface ICustomButton {
   title: string;
-  handlePress: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  handlePress: (e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>) => void;
   otherStyles?: any;
   isLoading?: boolean;
 }
