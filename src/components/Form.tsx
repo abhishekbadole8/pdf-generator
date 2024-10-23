@@ -22,7 +22,7 @@ export default function Form() {
 
   const [formData, setFormData] = useState<IFormData>({
     name: "",
-    email: "aaaaaaa",
+    email: "",
     password: "",
   });
 
@@ -51,19 +51,23 @@ export default function Form() {
 
   return (
     <div className="flex flex-col gap-y-6 md:gap-y-4 lg:gap-y-5">
+      {/* Heading & sub-heading */}
       <div className="w-4/5">
         <h3 className="font-bold tracking-wide text-textPrimary mb-2 md:text-3xl lg:text-4xl">
-          {pathname === '/login' ? "Let the Journey Begin!" : "Sign up to begin journey"}
+          {pathname === "/login"
+            ? "Let the Journey Begin!"
+            : "Sign up to begin journey"}
         </h3>
         <h6 className="text-lg font-normal text-textSecondary ">
-          {pathname === '/login'
+          {pathname === "/login"
             ? "This is basic login page which is used for levitation assignment purpose."
             : "This is basic signup page which is used for levitation assignment purpose."}
         </h6>
       </div>
 
+      {/* Input's */}
       {/* Username  */}
-      {pathname !== '/login' && (
+      {pathname !== "/login" && (
         <InputField
           title="Enter your name"
           type="text"
@@ -98,18 +102,21 @@ export default function Form() {
         errorMsg={errors.password}
       />
 
+      {/* Submit button */}
       <div className="flex items-center gap-8 ">
         <CustomButton
-          title={pathname === '/login' ? "Login now" : "Register"}
+          title={pathname === "/login" ? "Login now" : "Register"}
           otherStyles="text-base text-button-primary bg-button-secondary h-[48px] px-[19.5px]"
           handlePress={handleSubmit}
         />
 
         <a
-          href={pathname === '/login' ? "/#" : "/login"}
+          href={pathname === "/login" ? "/#" : "/login"}
           className="text-sm text-input-secondary"
         >
-          {pathname === '/login' ? "Forget password ?" : "Already have account ?"}
+          {pathname === "/login"
+            ? "Forget password ?"
+            : "Already have account ?"}
         </a>
       </div>
     </div>

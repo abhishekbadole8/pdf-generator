@@ -4,7 +4,7 @@ import { icons } from "../constants";
 interface IInputField {
   title: string;
   helperText?: string;
-  type: "password" | "email" | "text";
+  type: "password" | "email" | "text" | "number";
   name: string;
   value: string;
   placeholder?: string;
@@ -33,7 +33,7 @@ export default function InputField({
 
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   return (
-    <div>
+    <div className="w-full">
       <p className="text-base font-medium text-textPrimary">{title}</p>
 
       <div className="h-25 flex flex-row items-center relative">

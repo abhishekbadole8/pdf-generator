@@ -1,6 +1,10 @@
+import { icons } from "../constants";
+
 interface ICustomButton {
   title: string;
-  handlePress: (e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>) => void;
+  handlePress: (
+    e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>
+  ) => void;
   otherStyles?: any;
   isLoading?: boolean;
 }
@@ -46,6 +50,7 @@ export default function CustomButton({
           </svg>
         </>
       )}
+      {title === "Add Product" && <img src={icons.addIcon} alt="add-icon" className="w-[18px] h-[18px]"/>}
     </button>
   );
 }

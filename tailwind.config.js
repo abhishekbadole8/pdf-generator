@@ -26,6 +26,9 @@ export default {
           third: "#707070",
           border: "#424647",
         },
+        table:{
+          border:"#3F3F3F"
+        }
       },
     },
   },
