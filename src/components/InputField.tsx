@@ -38,7 +38,9 @@ export default function InputField({
 
       <div className="h-25 flex flex-row items-center relative">
         <input
-          className="w-full text-textPrimary bg-input-primary placeholder-input-third px-2.5 py-5 my-2 rounded border border-input-border sm:h-10 md:h-12 lg:h-14"
+          className={`w-full text-textPrimary bg-input-primary placeholder-input-third px-2.5 py-5 my-2 rounded border border-input-border ${
+            errorMsg ? "border-2 border-red-500" : ""
+          } sm:h-10 md:h-12 lg:h-14`}
           value={value}
           name={name}
           type={type === "password" && showPassword ? "text" : type}
@@ -49,7 +51,7 @@ export default function InputField({
         />
 
         {/* Password visibility toggle */}
-        {title === "Password" && (
+        {title === "Password" && value && (
           <img
             src={!showPassword ? icons.eye : icons.eyeHide}
             className="w-7 h-7 absolute  right-2.5 cursor-pointer"
@@ -60,7 +62,7 @@ export default function InputField({
 
         {/* Error Msg */}
         {errorMsg && (
-          <p className="text-xs text-red-500 absolute -bottom-2.5 left-1.5">
+          <p className="text-xs text-red-500 absolute -bottom-2 left-1.5">
             {errorMsg}
           </p>
         )}
