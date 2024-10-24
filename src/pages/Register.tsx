@@ -14,6 +14,17 @@ export default function Register() {
         />
 
         <Form />
+
+        <img
+          src={images.GreenBlur}
+          alt=""
+          className="absolute -bottom-4 -left-4 blur-xl"
+        />
+        <img
+          src={images.BlueBlur}
+          alt=""
+          className="absolute top-0 -right-2 blur-xl"
+        />
       </section>
     </div>
   );

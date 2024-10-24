@@ -7,6 +7,7 @@ import CustomButton from "../components/CustomButton";
 import Table from "../components/Table";
 import { validateFormData } from "../utils/addProductForm";
 import { getInvoice } from "../api/invoice";
+import { images } from "../constants";
 
 interface FormData {
   name: string;
@@ -85,7 +86,7 @@ export default function AddProduct() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-start px-8 lg:px-[140px] py-8 lg:py-[54px] lg:gap-x-36 gap-y-8 lg:gap-y-4 ">
+    <div className="relative w-full h-full flex flex-col items-start px-8 lg:px-[140px] py-8 lg:py-[54px] lg:gap-x-36 gap-y-8 lg:gap-y-4 ">
       <div className="w-4/5">
         <h3 className="font-bold tracking-wide text-textPrimary mb-2 md:text-3xl lg:text-4xl">
           Add Products
@@ -145,6 +146,13 @@ export default function AddProduct() {
         otherStyles="[&&]:px-28 mx-auto bg-button-secondary text-button-primary"
         handlePress={handleGeneratePDF}
       />
+
+
+        <img
+          src={images.BlueBlur}
+          alt=""
+          className="absolute -top-64 left-[325px] blur-3xl rotate-135 opacity-85"
+        />
     </div>
   );
 }
