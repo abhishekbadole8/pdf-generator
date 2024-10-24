@@ -52,7 +52,7 @@ export default function Form() {
   };
 
   const handleSubmit = async (
-    e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
 
@@ -115,6 +115,7 @@ export default function Form() {
       </div>
 
       {/* Input's */}
+      <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
       {/* Username  */}
       {pathname !== "/login" && (
         <InputField
@@ -171,6 +172,7 @@ export default function Form() {
             : "Already have account ?"}
         </a>
       </div>
+      </form>
     </div>
   );
 }
