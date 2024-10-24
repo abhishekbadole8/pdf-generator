@@ -1,50 +1,60 @@
-# React + TypeScript + Vite
+# Invoice Generator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a simple invoice generator application built with **React**, **Redux**, and **React Router**. It includes user authentication for accessing protected routes, such as adding a product.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Login and Register**: Users can sign in or create a new account.
+- **Protected Routes**: Only authenticated users can access certain pages, such as the page to add products.
+- **Navigation**: Uses `react-router-dom` to manage page routing and redirects based on the authentication status.
+- **Redux State Management**: The application uses Redux to store and manage user authentication state.
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Technologies Used
 
-- Configure the top-level `parserOptions` property like this:
+- **React**: For building the user interface.
+- **Redux**: For managing the global state, particularly for authentication.
+- **React Router**: For handling routing in the application.
+- **TypeScript**: For adding static typing to the application.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Getting Started
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Prerequisites
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- **Node.js**: Make sure you have Node.js installed on your machine.
+- **npm**: Package manager for installing dependencies.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/product-management-app.git
+   cd product-management-app
+
+
+2. Install dependencies:
+
+  ```bash
+    npm install
+    Start the development server:
+
+3. Start the development server:
+
+  ```bash
+    npm start
+
+
+## Redux Store
+
+The Redux store manages the authentication state. The RootState is used in useSelector to access the authToken for checking if the user is logged in or not.
+
+## Protected Routes
+
+The ProtectedRoute component is used to restrict access to certain routes. If a user is not authenticated, they will be redirected to the login page.
+
+
+## Available Scripts
+
+  npm start: Starts the development server.
+  npm run build: Builds the app for production.
