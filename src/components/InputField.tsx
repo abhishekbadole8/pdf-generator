@@ -59,11 +59,11 @@ export default function InputField({
         )}
 
         {/* Error Msg */}
-        {/* {errorMsg && (
-          <p className="text-xs text-red-500 absolute -bottom-5 left-2">
+        {errorMsg && (
+          <p className="text-xs text-red-500 absolute -bottom-2.5 left-1.5">
             {errorMsg}
           </p>
-        )} */}
+        )}
       </div>
 
       <p className="text-base font-medium text-input-secondary">{helperText}</p>

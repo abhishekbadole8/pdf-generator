@@ -12,14 +12,17 @@ interface FormData {
 }
 
 export const validateForm = (
+  isLogin: boolean,
   formData: FormData,
   setErrors: (errors: IFormErrors) => void
 ): boolean => {
   const newErrors: IFormErrors = {};
 
-  if (!formData.name) {
+  if (!formData.name && !isLogin) {
     newErrors.name = "Name is required";
-  } else if (formData.name.length < 2) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+  } else if (formData.name.length < 2 && !isLogin) {
     newErrors.name = "Name must be at least 2 characters long";
   }
 

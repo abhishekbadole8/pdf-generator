@@ -1,11 +1,15 @@
 import InputField from "./InputField";
 import CustomButton from "./CustomButton";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { validateForm } from "../utils/validateForm";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { loginUser, registerUser } from "../api/auth";
+import { loginSuccess } from "../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 interface IFormData {
-  name?: string;
+  name: string;
   email: string;
   password: string;
 }
@@ -19,14 +23,25 @@ interface IFormErrors {
 export default function Form() {
   const history = useLocation();
   const pathname = history.pathname;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const authToken = useSelector((state: RootState) => state.user.token);
+  
   const [formData, setFormData] = useState<IFormData>({
     name: "",
     email: "",
     password: "",
   });
 
+  useEffect(() => {
+    if (authToken) {
+      navigate("/addProduct");
+    }
+  }, [authToken]);
+
   const [errors, setErrors] = useState<IFormErrors>({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,16 +51,50 @@ export default function Form() {
     }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
 
-    const isValid = validateForm(formData, setErrors);
+    const isLogin = pathname === "/login";
 
-    if (isValid) {
-      // Submit the form or handle login/register logic
-      console.log("Form submitted", formData);
-    } else {
+    const isValid = validateForm(isLogin, formData, setErrors);
+
+    if (!isValid) {
       console.log("Form validation failed");
+      console.log(errors);
+      
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      let response;
+      if (isLogin) {
+        response = await loginUser(formData.email, formData.password);
+      } else {
+        response = await registerUser(
+          formData.name,
+          formData.email,
+          formData.password
+        );
+      }
+
+      const { authToken } = response;
+
+      // Dispatch action to store token in Redux
+      dispatch(loginSuccess({ token: authToken, email: formData.email }));
+
+      navigate("/addProduct");
+    } catch (error) {
+      console.error("Authentication error:", error);
+      setErrors((prev) => ({
+        ...prev,
+        common: "Authentication failed. Please try again.",
+      }));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -97,10 +146,12 @@ export default function Form() {
         name="password"
         value={formData.password}
         placeholder="Enter the Password"
-        // helperText="Any further updates will be forwarded on this Email ID"
         handleChangeText={handleChange}
         errorMsg={errors.password}
       />
+
+      {/* Error message */}
+      {errors.common && <p className="text-red-500">{errors.common}</p>}
 
       {/* Submit button */}
       <div className="flex items-center gap-8 ">
@@ -108,6 +159,7 @@ export default function Form() {
           title={pathname === "/login" ? "Login now" : "Register"}
           otherStyles="text-base text-button-primary bg-button-secondary h-[48px] px-[19.5px]"
           handlePress={handleSubmit}
+          isLoading={loading}
         />
 
         <a

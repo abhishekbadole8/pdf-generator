@@ -1,17 +1,25 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { CompanyLogo } from "./CompanyLogo";
 import CustomButton from "./CustomButton";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { logout } from "../redux/userSlice";
 
 export default function Header() {
   const history = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const pathname = history.pathname;
 
+  const isLoggedIn = useSelector((state: RootState) => state.user.token);
+
   const handleClick = () => {
-    if (pathname === "/login") {
+    if (isLoggedIn) {
+      dispatch(logout());
+    } else if (pathname === "/login") {
       navigate("/register");
-    } else if (pathname === "/register") {
+    } else if (pathname === "/register" || pathname === "/") {
       navigate("/login");
     }
   };
@@ -22,7 +30,11 @@ export default function Header() {
 
       <CustomButton
         title={
-          pathname === "/login" ? "Connecting People With Technology" : "Login"
+          pathname === "/login"
+            ? "Connecting People With Technology"
+            : isLoggedIn
+            ? "Logout"
+            : "Login"
         }
         handlePress={handleClick}
         otherStyles={`max-h-[41px] ${

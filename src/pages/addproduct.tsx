@@ -1,16 +1,34 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { addProduct } from "../redux/productSlice";
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
 import Table from "../components/Table";
+import { validateFormData } from "../utils/addProductForm";
+import { getInvoice } from "../api/invoice";
+
+interface FormData {
+  name: string;
+  quantity: string;
+  price: string;
+  total_price: string;
+}
 
 export default function AddProduct() {
-  const [formData, setFormData] = useState({
-    productName: "",
-    productPrice: "",
-    quantity: "",
-  });
+  const dispatch = useDispatch();
 
-  const handleChange = (e) => {
+  const products = useSelector((state: RootState) => state.products.products);
+
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    price: "",
+    quantity: "",
+    total_price: "",
+  });
+  const [errors, setErrors] = useState({ name: "", price: "", quantity: "" });
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -18,24 +36,52 @@ export default function AddProduct() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleAddProduct = (
+    e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
-    // Validate and process the form data here
-    if (!formData.productName || !formData.productPrice || !formData.quantity) {
-      // Handle error (e.g., show a message)
-      console.log("Please fill in all fields.");
+
+    // Validate form data using the utility function
+    const validationErrors = validateFormData(formData);
+    setErrors(validationErrors);
+
+    if (
+      validationErrors.name ||
+      validationErrors.price ||
+      validationErrors.quantity
+    ) {
+      console.log("Validation failed.");
       return;
     }
 
-    // Perform further actions, such as sending the data to an API
-    console.log("Product Added:", formData);
+    dispatch(
+      addProduct({
+        ...formData,
+        price: parseFloat(formData.price), // Convert price to number
+        quantity: parseInt(formData.quantity), // Convert quantity to number
+        total_price: parseInt(formData.quantity) * parseInt(formData.price),
+      })
+    );
 
     // Clear the form after submission (optional)
     setFormData({
-      productName: "",
-      productPrice: "",
+      name: "",
+      price: "",
       quantity: "",
+      total_price: "",
     });
+  };
+
+  const handleGeneratePDF = async () => {
+    try {
+      console.log("Generating PDF...");
+
+      await getInvoice(products);
+
+      console.log("PDF Generated successfully");
+    } catch (error) {
+      console.error("Error generating PDF", error);
+    }
   };
 
   return (
@@ -50,24 +96,26 @@ export default function AddProduct() {
         </h6>
       </div>
 
-      <form onSubmit={handleSubmit} className="min-w-full">
+      <form onSubmit={handleAddProduct} className="min-w-full">
         <div className="flex w-full gap-x-8">
           <InputField
             title="Product Name"
             placeholder="Enter the product name"
-            name="productName"
+            name="name"
             type="text"
-            value={formData.productName}
+            value={formData.name}
             handleChangeText={handleChange}
+            errorMsg={errors.name}
           />
           <InputField
             title="Product Price"
             placeholder="Enter the price"
-            name="productPrice"
+            name="price"
             type="number"
-            value={formData.productPrice}
+            value={formData.price}
             handleChangeText={handleChange}
             otherStyles="selector:none"
+            errorMsg={errors.price}
           />
           <InputField
             title="Quantity"
@@ -76,24 +124,26 @@ export default function AddProduct() {
             type="number"
             value={formData.quantity}
             handleChangeText={handleChange}
+            errorMsg={errors.quantity}
           />
         </div>
         <div className="mt-4">
           <CustomButton
             title="Add Product"
             otherStyles="text-base text-button-primary bg-button-secondary h-[48px] px-[19.5px]"
-            handlePress={handleSubmit}
+            handlePress={handleAddProduct}
           />
         </div>
       </form>
 
-      <Table />
+      {/* Display the products from the store */}
+      <Table products={products} />
 
-      {/* Generate Pdf */}
+      {/* Generate Pdf Button*/}
       <CustomButton
         title="Generate PDF Invoice"
         otherStyles="[&&]:px-28 mx-auto bg-button-secondary text-button-primary"
-        handlePress={handleSubmit}
+        handlePress={handleGeneratePDF}
       />
     </div>
   );

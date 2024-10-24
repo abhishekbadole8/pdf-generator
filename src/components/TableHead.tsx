@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function TableHead() {
   return (
     <thead className="text-black bg-white opacity-90 rounded-lg">
