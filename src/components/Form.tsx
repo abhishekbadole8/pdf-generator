@@ -87,11 +87,12 @@ export default function Form() {
       dispatch(loginSuccess({ token: authToken, email: formData.email }));
 
       navigate("/addProduct");
-    } catch (error) {
-      console.error("Authentication error:", error);
+    } catch (error: any) {
+      const errorMsg =  error.response.data.error
+      console.error("Authentication error:",);
       setErrors((prev) => ({
         ...prev,
-        common: "Authentication failed. Please try again.",
+        common: errorMsg,
       }));
     } finally {
       setLoading(false);
